@@ -8,37 +8,10 @@ A utility-first CSS framework packed with classes like flex, pt-4, text-center a
 
 to integrate _tailwindcss_  with _spring-boot_ we need to start a node js application, which is already loaded here: `src/main/webapp`.
 
-The `pom.xml` will load the processed tailwind file during compilation time.
+The `pom.xml` will load the processed tailwind file during compilation and packaging phase.
 
 ````xml
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-resources-plugin</artifactId>
-    <version>${maven-resources-plugin.version}</version>
-    <executions>
-        <execution>
-            <id>copy-resources</id>
-            <phase>process-classes</phase>
-            <goals>
-                <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-                <outputDirectory>${basedir}/target/classes/static</outputDirectory>
-                <resources>
-                    <resource>
-                        <directory>src/main/webapp/public/static</directory>
-                    </resource>
-                </resources>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
-````
-
-And then execute the command `node run build:css` with maven.
-
-````xml
-<plugin>
+ <plugin>
     <groupId>com.github.eirslett</groupId>
     <artifactId>frontend-maven-plugin</artifactId>
     <version>${frontend-maven-plugin.version}</version>
@@ -56,19 +29,49 @@ And then execute the command `node run build:css` with maven.
             </configuration>
         </execution>
         <execution>
-            <id>npm build</id>
+            <id>npm install</id>
             <goals>
                 <goal>npm</goal>
             </goals>
             <phase>compile</phase>
             <configuration>
-                <arguments>run build:css</arguments>
+                <arguments>install</arguments>
+            </configuration>
+        </execution>
+        <execution>
+            <id>npm build</id>
+            <goals>
+                <goal>npm</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+                <arguments>run build</arguments>
             </configuration>
         </execution>
     </executions>
 </plugin>
 ````
 
-## Testing without spring-boot
+## Live Reload
 
-Into the webapp folder `src/main/webapp` run `npm run build:css` and `node index.js`, it will start a server `http://localhost:3000` then a `Hello World!` will be displayed on the browser.
+Add the spring boot dev tools and configure the IDE to build automatically.
+
+````xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <scope>runtime</scope>
+    <optional>true</optional>
+</dependency>
+````
+
+Run the tailwind watch.
+
+````shell
+npm run build:dev
+````
+
+### IntelliJ
+
+https://stackoverflow.com/a/63975477/4775487
+https://stackoverflow.com/a/12744431/4775487
