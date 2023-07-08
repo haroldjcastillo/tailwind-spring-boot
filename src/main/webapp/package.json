@@ -4,19 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:css": "postcss public/static/css/tailwind.css -o public/static/css/styles.css"
+    "build:dev": "postcss tailwind.css -o ../resources/static/css/main.css --watch --verbose",
+    "build": "NODE_ENV=production postcss tailwind.css -o ../resources/static/css/main.css"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "ejs": "^3.1.6",
-    "express": "^4.17.1"
-  },
   "devDependencies": {
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.5",
-    "postcss-cli": "^9.1.0",
-    "tailwindcss": "^3.0.7"
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.25",
+    "postcss-cli": "^10.1.0",
+    "tailwindcss": "^3.3.2"
   }
 }
